@@ -1,5 +1,6 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import "./Editor.scss";
 
 /**
 * Rich text Editor Component
@@ -15,6 +16,12 @@ export const Editor = ({ content }) => {
 	});
 
 	return (
-		<EditorContent editor={editor} />
+		<div className="editor">
+			<div className="editor__toolbar">
+			</div>
+			<div className="editor__container">
+				<EditorContent editor={editor} />
+			</div>
+		</div>
 	);
 };
