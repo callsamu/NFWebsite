@@ -12,7 +12,7 @@ const ToggleButton = ({ active, children, ...buttonProps }) => {
 		<button
 			type="button"
 			aria-selected={active}
-			className={`toggle-button ${active ? "active" : ""}`}
+			className="editor-button"
 			{...buttonProps}
 		>
 			{children}
