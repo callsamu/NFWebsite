@@ -1,7 +1,11 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import "./Editor.scss";
 import { Bold, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
+
+import { HeadingSelector } from "./HeadingSelector"; 
+
+import "./Editor.scss";
+
 
 const ToggleButton = ({ active, children, ...buttonProps }) => {
 	return (
@@ -32,6 +36,12 @@ export const Editor = ({ content }) => {
 	return (
 		<div className="editor">
 			<div className="editor__toolbar">
+				<div>
+					<HeadingSelector 
+						isActive={(type, props) => editor.isActive(type, props)}
+						setNode={(type, props) => editor.chain().focus().setNode(type, props).run()}
+					/>
+				</div>
 				<div>
 					<ToggleButton
 						title="Bold"
