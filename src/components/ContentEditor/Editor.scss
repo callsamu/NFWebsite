@@ -1,13 +1,14 @@
-.toggle-button {
-  background: #fff;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-}
+.editor-button {
+    background: #fff;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: inline;
 
-.toggle-button:hover, 
-.toggle-button[aria-selected="true"] {
-  color: #06c;
+    &:hover,
+    &[aria-selected="true"] {
+        color: #06c;
+    }
 }
 
 .editor {
@@ -23,7 +24,16 @@
         display: flex;
         gap: 0.5rem;
         padding: 0 1rem;
+
     }
+
+
+    .button:hover, 
+    .button[aria-selected="true"] {
+      color: #06c;
+    }
+
+
 
     &__container {
         height: 300px;
