@@ -1,10 +1,47 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Bold, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
+import Image from "@tiptap/extension-image";
+import { Bold, ImageIcon, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
 
 import { HeadingSelector } from "./HeadingSelector"; 
 
 import "./Editor.scss";
+import { useRef } from "react";
+
+
+const ImageInputButton = ({ onChange, children }) => {
+	const input = useRef(null);
+
+	function onInputChange() {
+		const file = input.current.files[0];
+		const reader = new FileReader()
+		reader.readAsDataURL(file)
+		reader.onload = () => {
+			onChange(reader.result);
+			input.current.value = null;
+		}
+	}
+
+	return (
+		<div>
+			<input 
+				style={{ display: "none" }} 
+				ref={input} 
+				type="file" 
+				id="image-input"
+				onChange={onInputChange}
+			/>
+			<label 
+				for="image-input"
+				onClick={() => input.current.click()} 
+			>
+				<button className="editor-button">
+					{ children }
+				</button>
+			</label>
+		</div>
+	);
+};
 
 
 const ToggleButton = ({ active, children, ...buttonProps }) => {
@@ -29,7 +66,7 @@ const ToggleButton = ({ active, children, ...buttonProps }) => {
 */
 export const Editor = ({ content }) => {
 	const editor = useEditor({
-		extensions: [StarterKit],
+		extensions: [StarterKit, Image],
 		content: content,
 	});
 
@@ -80,6 +117,13 @@ export const Editor = ({ content }) => {
 					>
 						<List size={16} />
 					</ToggleButton>
+				</div>
+				<div>
+					<ImageInputButton 
+						onChange={(url) => editor.chain().focus().setImage({ src: url }).run()}
+					>
+						<ImageIcon size={16} />
+					</ImageInputButton>
 				</div>
 			</div>
 			<div className="editor__container">
