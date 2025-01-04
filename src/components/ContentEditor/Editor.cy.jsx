@@ -30,5 +30,21 @@ describe('<Editor />', () => {
 	  type('1. numbered list{enter}second item{enter}{enter}');
 	  cy.get('@editor').find('ol').find('li').eq(0).contains('numbered list');
 	  cy.get('@editor').find('ol').find('li').eq(1).contains('second item');
-  })
+  });
+
+  it('should support images', () => {
+	  cy.mount(<Editor />);
+
+	  cy.fixture('test.jpeg', null).
+		  as('testImage').
+		  then(() => {;
+			  cy.get('label[for=image-input]').as('fileInput');
+			  cy.get('@fileInput').selectFile('@testImage');
+
+			  cy.get('.tiptap').find('img');
+
+			  cy.get('.tiptap').type("{enter} hello");
+			  cy.get('@fileInput').selectFile('@testImage');
+		  });
+  });
 })
