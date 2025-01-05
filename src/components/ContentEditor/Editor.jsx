@@ -1,12 +1,16 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import { useMemo, useRef } from "react";
+
+import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
-import { Bold, ImageIcon, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
+import Link from "@tiptap/extension-link";
+
+import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, Strikethrough } from "lucide-react";
 
 import { HeadingSelector } from "./HeadingSelector"; 
+import { LinkEditor } from "./LinkEditor";
 
 import "./Editor.scss";
-import { useRef } from "react";
 
 
 const ImageInputButton = ({ onChange, children }) => {
@@ -66,9 +70,38 @@ const ToggleButton = ({ active, children, ...buttonProps }) => {
 */
 export const Editor = ({ content }) => {
 	const editor = useEditor({
-		extensions: [StarterKit, Image],
+		extensions: [
+			StarterKit, 
+			Image,
+			Link.configure({
+			}),
+		],
 		content: content,
+		onTransaction: ({ editor, transaction }) => {
+			let tr = transaction;
+			const removingEmptyLink = tr.getMeta("removeEmptyLink");
+
+			if (!removingEmptyLink && !tr.selection.eq(oldSelection.current)) {
+				const marks = oldSelection.current.$to.marks();
+
+				const emptyLink = marks && marks.find(mark => 
+					mark.type.name === "link" &&
+					mark.attrs.href === null
+				);
+
+				if (emptyLink) {
+					const { to } = oldSelection.current;
+					tr = editor.state.tr.removeMark(0, to, emptyLink);
+					tr = tr.setMeta("removeEmptyLink", true);
+					editor.view.dispatch(tr);
+				}
+			}
+
+			oldSelection.current = editor.state.selection;
+		},
 	});
+
+	const oldSelection = useRef(editor.state.selection);
 
 	return (
 		<div className="editor">
@@ -125,10 +158,37 @@ export const Editor = ({ content }) => {
 						<ImageIcon size={16} />
 					</ImageInputButton>
 				</div>
+				<div>
+					<ToggleButton
+						title="Link"
+						onClick={() => {
+							if (editor.isActive("link")) {
+								editor.chain().focus().unsetMark('link').run();
+							} else {
+								editor.chain().focus().toggleLink({ href: null }).run()
+							}
+						}}
+						active={editor.isActive("link")}
+					>
+						<LinkIcon size={16} />
+					</ToggleButton>
+				</div>
 			</div>
-			<div className="editor__container">
-				<EditorContent editor={editor} />
-			</div>
+			{ editor &&
+				<BubbleMenu
+					editor={editor}
+					tippyOptions={{ placement: 'bottom' }}
+					shouldShow={({ editor }) => editor.isActive("link")}
+				>
+					
+					<LinkEditor 
+						href={editor.getAttributes("link").href} 
+						onChange={(href) => editor.chain().extendMarkRange("link").setLink({ href }).run()}
+						onDelete={() => editor.chain().extendMarkRange("link").unsetLink().run()}
+					/>
+				</BubbleMenu>
+			}
+			<EditorContent className="editor__container" editor={editor} />
 		</div>
 	);
 };
