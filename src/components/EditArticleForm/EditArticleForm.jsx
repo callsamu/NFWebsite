@@ -1,7 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Loader2, X } from "lucide-react";
 import "react-quill/dist/quill.snow.css";
 import "./EditArticleForm.scss";
@@ -18,8 +17,7 @@ import {
     SelectValue,
 } from "../ui/select";
 import ImageUpload from "../ImageUpload/ImageUpload";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import Editor from "../ContentEditor";
 
 const predefinedTags = ["Clinical Trial", "Meta-Analysis", "Review", "REiNS"];
 
@@ -40,7 +38,6 @@ const EditArticleForm = ({
     const [content, setContent] = useState(articleData?.innertext || "");
     const [summary, setSummary] = useState(articleData?.summary || "");
     const [imageUrl, setImageUrl] = useState(articleData?.image_url || null);
-    const quillRef = useRef(null);
 
     const handleAddTag = (tag) => {
         if (tag && !tags.includes(tag)) {
@@ -68,28 +65,6 @@ const EditArticleForm = ({
             image_url: imageUrl,
         });
     };
-
-    const modules = {
-        toolbar: [
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline", "strike"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
-            ["clean"],
-        ],
-    };
-
-    const formats = [
-        "header",
-        "bold",
-        "italic",
-        "underline",
-        "strike",
-        "list",
-        "bullet",
-        "link",
-        "image",
-    ];
 
     return (
         <form className="edit-article-form">
@@ -171,12 +146,9 @@ const EditArticleForm = ({
 
             <div className="edit-article-form__field">
                 <Label className="edit-article-form__label">Summary</Label>
-                <ReactQuill
-                    value={summary}
+                <Editor
+                    content={summary}
                     onChange={setSummary}
-                    modules={modules}
-                    formats={formats}
-                    theme="snow"
                     className="edit-article-form__editor"
                 />
             </div>
@@ -185,13 +157,9 @@ const EditArticleForm = ({
                 <Label className="edit-article-form__label">
                     Article Content
                 </Label>
-                <ReactQuill
-                    ref={quillRef}
-                    value={content}
+                <Editor
+                    content={content}
                     onChange={setContent}
-                    modules={modules}
-                    formats={formats}
-                    theme="snow"
                     className="edit-article-form__editor"
                 />
             </div>
