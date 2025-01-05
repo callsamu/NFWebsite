@@ -20,7 +20,6 @@ export const HeadingSelector = ({ isActive, setNode }) => {
 		let pos = null;
 
 		HEADINGS.forEach((_, idx) => {
-			console.log(idx);
 			if (idx == 0 && isActive('paragraph')) {
 				pos = 0;
 			} 
