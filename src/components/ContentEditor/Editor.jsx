@@ -10,44 +10,10 @@ import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, RemoveFormatting,
 
 import { HeadingSelector } from "./HeadingSelector"; 
 import { LinkEditor } from "./LinkEditor";
+import { ImageInputButton } from "./ImageInputButton";
 
 import "./utils.scss";
 import "./Editor.scss";
-
-
-const ImageInputButton = ({ onChange, children }) => {
-	const input = useRef(null);
-
-	function onInputChange() {
-		const file = input.current.files[0];
-		const reader = new FileReader()
-		reader.readAsDataURL(file)
-		reader.onload = () => {
-			onChange(reader.result);
-			input.current.value = null;
-		}
-	}
-
-	return (
-		<div>
-			<input 
-				style={{ display: "none" }} 
-				ref={input} 
-				type="file" 
-				id="image-input"
-				onChange={onInputChange}
-			/>
-			<label 
-				for="image-input"
-				onClick={() => input.current.click()} 
-			>
-				<button className="editor-button">
-					{ children }
-				</button>
-			</label>
-		</div>
-	);
-};
 
 
 const ToggleButton = ({ active, children, ...buttonProps }) => {
