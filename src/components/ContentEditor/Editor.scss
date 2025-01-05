@@ -15,8 +15,8 @@
     border-radius: 10px;
     border: 1px solid #d8d8d8;
     background: #fff;
+    height: fit-content;
     box-shadow: 0px 6px 7.7px 0px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
 
     &__toolbar {
         border: none;
@@ -24,37 +24,33 @@
         display: flex;
         gap: 0.5rem;
         padding: 0 1rem;
-
     }
-
 
     .button:hover, 
     .button[aria-selected="true"] {
       color: #06c;
     }
 
-
-
     &__container {
-        height: 300px;
-
         border: none;
 
         box-sizing: border-box;
         font-family: Helvetica,Arial,sans-serif;
         font-size: 13px;
-        height: 100%;
-        margin: 0;
         position: relative;
 
+        height: 400px;
+        overflow-y: scroll;
+        display: flex;
+        align-items: stretch;
+
         .tiptap {
-            box-sizing: border-box;
+            flex-grow: 1;
+            margin: 1rem 2rem;
             counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
             line-height: 1.42;
-            height: 100%;
             outline: none;
             overflow-y: auto;
-            padding: 12px 15px;
             tab-size: 4;
             -moz-tab-size: 4;
             text-align: left;
