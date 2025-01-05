@@ -47,4 +47,17 @@ describe('<Editor />', () => {
 			  cy.get('@fileInput').selectFile('@testImage');
 		  });
   });
-})
+
+  it('should support link editing', () => {
+	  cy.mount(<Editor />);
+
+	  cy.get('.tiptap').as('editor');
+	  cy.get('@editor').type('Access ');
+	  cy.get('@editor').type('Google{selectall}');
+	  cy.get("button[title='Link']").click();
+	  cy.get(".link-editor").as("linkEditor").should('be.visible');
+	  cy.get("@linkEditor").find("input").type("https://google.com");
+	  cy.get("@linkEditor").contains("Save").click();
+	  cy.get("@editor").find("a").should("have.attr", "href", "https://google.com");
+  });
+});
