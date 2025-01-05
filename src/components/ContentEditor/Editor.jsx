@@ -66,10 +66,11 @@ const ToggleButton = ({ active, children, ...buttonProps }) => {
 * Rich text Editor Component
 * @typedef {object} EditorProps
 *  @property {string} content
+*  @property {function} onChange
 *
 * @param {EditorProps} props
 */
-export const Editor = ({ content }) => {
+export const Editor = ({ content, onChange }) => {
 	const editor = useEditor({
 		extensions: [
 			StarterKit, 
@@ -78,6 +79,9 @@ export const Editor = ({ content }) => {
 			Underline,
 		],
 		content: content,
+		onUpdate: ({ editor }) => {
+			if (onChange) onChange(editor.getHTML());
+		},
 		onTransaction: ({ editor, transaction }) => {
 			let tr = transaction;
 			const removingEmptyLink = tr.getMeta("removeEmptyLink");
