@@ -11,6 +11,7 @@ import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, RemoveFormatting,
 import { HeadingSelector } from "./HeadingSelector"; 
 import { LinkEditor } from "./LinkEditor";
 
+import "./utils.scss";
 import "./Editor.scss";
 
 
