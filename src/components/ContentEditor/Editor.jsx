@@ -6,7 +6,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 
-import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, Strikethrough, UnderlineIcon } from "lucide-react";
+import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, RemoveFormatting, Strikethrough, UnderlineIcon } from "lucide-react";
 
 import { HeadingSelector } from "./HeadingSelector"; 
 import { LinkEditor } from "./LinkEditor";
@@ -181,6 +181,9 @@ export const Editor = ({ content }) => {
 					>
 						<LinkIcon size={16} />
 					</ToggleButton>
+					<button className="editor-button" onClick={() => editor.chain().unsetAllMarks().run()}>
+						<RemoveFormatting size={16} />
+					</button>
 				</div>
 			</div>
 			{ editor &&
