@@ -4,8 +4,9 @@ import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 
-import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, Strikethrough } from "lucide-react";
+import { Bold, ImageIcon, Italic, LinkIcon, List, ListOrdered, Strikethrough, UnderlineIcon } from "lucide-react";
 
 import { HeadingSelector } from "./HeadingSelector"; 
 import { LinkEditor } from "./LinkEditor";
@@ -75,6 +76,7 @@ export const Editor = ({ content }) => {
 			Image,
 			Link.configure({
 			}),
+			Underline,
 		],
 		content: content,
 		onTransaction: ({ editor, transaction }) => {
@@ -133,6 +135,13 @@ export const Editor = ({ content }) => {
 						active={editor.isActive("strike")}
 					>
 						<Strikethrough size={16} />
+					</ToggleButton>
+					<ToggleButton
+						title="Underline"
+						onClick={() => editor.chain().focus().toggleUnderline().run()}
+						active={editor.isActive("underline")}
+					>
+						<UnderlineIcon size={16} />
 					</ToggleButton>
 				</div>
 				<div>
