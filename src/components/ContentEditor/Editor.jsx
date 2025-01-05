@@ -1,6 +1,6 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 
-import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
+import { EditorContent, useEditor, BubbleMenu, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -74,8 +74,7 @@ export const Editor = ({ content }) => {
 		extensions: [
 			StarterKit, 
 			Image,
-			Link.configure({
-			}),
+			Link,
 			Underline,
 		],
 		content: content,
@@ -103,6 +102,19 @@ export const Editor = ({ content }) => {
 		},
 	});
 
+	const editorState = useEditorState({
+		editor,
+		selector: ({ editor }) => ({
+			isBold: editor.isActive("bold"),
+			isItalic: editor.isActive("italic"),
+			isUnderline: editor.isActive("underline"),
+			isStrikethrough: editor.isActive("strike"),
+			isLink: editor.isActive("link"),
+			isList: editor.isActive("bulletList"),
+			isOrderedList: editor.isActive("orderedList")
+		})
+	})
+
 	const oldSelection = useRef(editor.state.selection);
 
 	return (
@@ -118,28 +130,28 @@ export const Editor = ({ content }) => {
 					<ToggleButton
 						title="Bold"
 						onClick={() => editor.chain().focus().toggleBold().run()}
-						active={editor.isActive("bold")}
+						active={editorState.isBold}
 					>
 						<Bold size={16} />
 					</ToggleButton>
 					<ToggleButton
 						title="Italic"
 						onClick={() => editor.chain().focus().toggleItalic().run()}
-						active={editor.isActive("italic")}
+						active={editorState.isItalic}
 					>
 						<Italic size={16} />
 					</ToggleButton>
 					<ToggleButton
 						title="Strikethrough"
 						onClick={() => editor.chain().focus().toggleStrike().run()}
-						active={editor.isActive("strike")}
+						active={editorState.isStrikethrough}
 					>
 						<Strikethrough size={16} />
 					</ToggleButton>
 					<ToggleButton
 						title="Underline"
 						onClick={() => editor.chain().focus().toggleUnderline().run()}
-						active={editor.isActive("underline")}
+						active={editorState.isUnderline}
 					>
 						<UnderlineIcon size={16} />
 					</ToggleButton>
@@ -148,14 +160,14 @@ export const Editor = ({ content }) => {
 					<ToggleButton
 						title="Ordered List"
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}
-						active={editor.isActive("orderedList")}
+						active={editorState.isOrderedList}
 					>
 						<ListOrdered size={16} />
 					</ToggleButton>
 					<ToggleButton
 						title="List"
 						onClick={() => editor.chain().focus().toggleBulletList().run()}
-						active={editor.isActive("bulletList")}
+						active={editorState.isList}
 					>
 						<List size={16} />
 					</ToggleButton>
@@ -171,13 +183,13 @@ export const Editor = ({ content }) => {
 					<ToggleButton
 						title="Link"
 						onClick={() => {
-							if (editor.isActive("link")) {
+							if (editorState.isLink) {
 								editor.chain().focus().unsetMark('link').run();
 							} else {
 								editor.chain().focus().toggleLink({ href: null }).run()
 							}
 						}}
-						active={editor.isActive("link")}
+						active={editorState.isLink}
 					>
 						<LinkIcon size={16} />
 					</ToggleButton>
