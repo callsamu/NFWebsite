@@ -39,6 +39,7 @@ const ToggleButton = ({ active, children, ...buttonProps }) => {
 */
 export const Editor = ({ content, onChange }) => {
 	const editor = useEditor({
+		enableContentCheck: true,
 		extensions: [
 			StarterKit, 
 			Image,
@@ -46,9 +47,11 @@ export const Editor = ({ content, onChange }) => {
 			Underline,
 		],
 		content: content,
+		onContentError: ({ error }) => console.error(error),
 		onUpdate: ({ editor }) => {
 			if (onChange) onChange(editor.getHTML());
 		},
+
 		onTransaction: ({ editor, transaction }) => {
 			let tr = transaction;
 			const removingEmptyLink = tr.getMeta("removeEmptyLink");
